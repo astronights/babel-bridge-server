@@ -38,6 +38,7 @@ def _room_to_response(doc: dict) -> RoomResponse:
         members=[Member(**m) for m in doc.get("members", [])],
         last_scenario=doc.get("last_scenario"),
         last_scenario_title=doc.get("last_scenario_title"),
+        last_conversation_id=doc.get("last_conversation_id"),
     )
 
 
