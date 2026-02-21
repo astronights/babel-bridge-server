@@ -4,7 +4,7 @@ from bson import ObjectId
 from core.auth import get_current_user
 from core.database import rooms_col, conversations_col
 from models.schemas import (
-    CreateConversationRequest, SubmitResponseRequest, ConversationResponse,
+    CreateConversationRequest, InputMode, SubmitResponseRequest, ConversationResponse,
     Conversation, Participant, Response, RoomStatus, ConversationStatus,
     Role, utcnow,
 )
@@ -239,12 +239,14 @@ async def submit_turn(
         raise HTTPException(status_code=403, detail="It is not your turn")
 
     # Score the response
-    result = score_response(body.text, msg["roman_text"])
+    target_text = msg["native_text"] if body.input_mode == InputMode.native else msg["roman_text"]
+    result = score_response(body.text, target_text)
 
     response_doc = Response(
         user_id=user_id,
         display_name=participant["display_name"],
         text=body.text,
+        input_mode=body.input_mode,
         score=result["score"],
         score_label=result["label"],
         score_breakdown=result["breakdown"],

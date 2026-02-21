@@ -54,6 +54,9 @@ class Role(str, Enum):
     c = "C"
     d = "D"
 
+class InputMode(str, Enum):
+    roman = "roman"
+    native = "native"
 
 # ─────────────────────────────────────────
 #  Sub-documents (embedded)
@@ -78,6 +81,7 @@ class Response(BaseModel):
     user_id: str
     display_name: str
     text: str
+    input_mode: InputMode = InputMode.roman
     score: int  # 0-100
     score_label: str
     score_breakdown: str
@@ -181,6 +185,7 @@ class CreateConversationRequest(BaseModel):
 
 class SubmitResponseRequest(BaseModel):
     text: str = Field(min_length=1)
+    input_mode: InputMode = InputMode.roman
 
 
 class ConversationResponse(BaseModel):
