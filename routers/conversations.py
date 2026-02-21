@@ -121,8 +121,8 @@ async def create_conversation(
     # Generate conversation via Gemini
     try:
         scenario, messages = await generate_conversation(
-            language=room_doc["language"],
-            level=room_doc["level"],
+            language_display=room_doc["language"],
+            level_code=room_doc["level"],
             participants=participants,
             prompt=body.prompt,
             max_turns=body.max_turns,

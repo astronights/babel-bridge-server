@@ -67,7 +67,7 @@ def _build_prompt(
         scenario=scenario,
         roles_block="\n".join(role_lines),
         turn_plan=turn_plan,
-        max_turns=max_turns,
+        max_turns=max_turns*len(participants),  # Total turns across all roles
         native_prompt=lang_doc["native_prompt"],
         roman_prompt=lang_doc["roman_prompt"],
     )
@@ -93,7 +93,7 @@ async def generate_conversation(
     scenario = _resolve_scenario(level_doc, lang_doc["code"], prompt)
     ai_prompt = _build_prompt(lang_doc, level_doc, scenario, participants, max_turns)
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     response = await model.generate_content_async(ai_prompt)
     text = response.text.strip()
 
@@ -101,9 +101,9 @@ async def generate_conversation(
     text = re.sub(r"^```json\s*|^```\s*|```\s*$", "", text, flags=re.MULTILINE).strip()
     raw_turns: list[dict] = json.loads(text)
 
-    if not isinstance(raw_turns, list) or len(raw_turns) != max_turns:
+    if not isinstance(raw_turns, list) or len(raw_turns) != max_turns * len(participants):
         raise ValueError(
-            f"Expected {max_turns} turns from AI, got "
+            f"Expected {max_turns * len(participants)} turns from AI, got "
             f"{len(raw_turns) if isinstance(raw_turns, list) else type(raw_turns)}"
         )
 
