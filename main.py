@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.database import create_indexes
-from routers import auth, rooms, conversations
+from routers import auth, rooms, conversations, meta
 
 
 @asynccontextmanager
@@ -33,6 +33,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(rooms.router)
 app.include_router(conversations.router)
+app.include_router(meta.router)
 
 
 @app.get("/", tags=["Health"])
