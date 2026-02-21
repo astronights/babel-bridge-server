@@ -120,7 +120,7 @@ async def create_conversation(
 
     # Generate conversation via Gemini
     try:
-        scenario, messages = await generate_conversation(
+        scenario, scenario_title, messages = await generate_conversation(
             language_display=room_doc["language"],
             level_code=room_doc["level"],
             participants=participants,
@@ -150,7 +150,11 @@ async def create_conversation(
     # Mark room as active
     await rooms_col().update_one(
         {"_id": ObjectId(room_id)},
-        {"$set": {"status": RoomStatus.active}},
+        {"$set": {
+            "status": RoomStatus.active,
+            "last_scenario": scenario,
+            "last_scenario_title": scenario_title,
+        }},
     )
 
     saved = await conversations_col().find_one({"_id": doc["_id"]})

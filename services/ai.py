@@ -79,9 +79,9 @@ async def generate_conversation(
     participants: list[Participant],
     prompt: Optional[str] = None,
     max_turns: int = 20,
-) -> tuple[str, list[Message]]:
+) -> tuple[str, str, list[Message]]:
     """
-    Returns (resolved_scenario, list[Message]).
+    Returns (resolved_scenario, scenario_title, list[Message]).
     Fetches language and level data from MongoDB.
     """
     # Find language doc by display name
@@ -99,7 +99,11 @@ async def generate_conversation(
 
     # Strip markdown fences if present
     text = re.sub(r"^```json\s*|^```\s*|```\s*$", "", text, flags=re.MULTILINE).strip()
-    raw_turns: list[dict] = json.loads(text)
+    raw = json.loads(text)
+
+    # Extract title and turns from new structure
+    scenario_title = raw.get("scenario_title", scenario[:20])
+    raw_turns = raw.get("turns", [])
 
     if not isinstance(raw_turns, list) or len(raw_turns) != max_turns * len(participants):
         raise ValueError(
@@ -120,4 +124,4 @@ async def generate_conversation(
         for t in raw_turns
     ]
 
-    return scenario, messages
+    return scenario, scenario_title, messages

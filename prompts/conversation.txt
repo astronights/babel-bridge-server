@@ -24,13 +24,16 @@ Requirements:
 
 Return ONLY a valid JSON array — no markdown, no explanation, nothing else:
 [
-  {{
-    "turn_number": 1,
-    "speaker": "<role letter A/B/C/D>",
-    "roman_text": "<line in roman/latin script>",
-    "native_text": "<line in native script>",
-    "english_text": "<English translation>",
-    "hint": "<grammar or vocab tip>"
-  }},
-  ...
+  "scenario_title": "<2-3 word catchy title for this scenario>",
+  "turns": [
+    {{
+      "turn_number": 1,
+      "speaker": "<role letter A/B/C/D>",
+      "roman_text": "<line in roman/latin script>",
+      "native_text": "<line in native script>",
+      "english_text": "<English translation>",
+      "hint": "<grammar or vocab tip>"
+    }},
+    ...
+  ]
 ]
