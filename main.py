@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="LingoTogether API",
+    title="BabelBridge API",
     description="AI-powered multiplayer language learning backend",
     version="1.0.0",
     lifespan=lifespan,
@@ -37,4 +37,4 @@ app.include_router(conversations.router)
 
 @app.get("/", tags=["Health"])
 async def health():
-    return {"status": "ok", "service": "LingoTogether API"}
+    return {"status": "ok", "service": "Babel Bridge API"}
