@@ -125,6 +125,7 @@ async def create_conversation(
             level=room_doc["level"],
             participants=participants,
             prompt=body.prompt,
+            max_turns=body.max_turns,
         )
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"AI generation failed: {e}")
@@ -256,7 +257,8 @@ async def submit_turn(
     # Determine next turn (skip AI turns automatically)
     next_turn = _find_next_human_turn(messages, turn_number, participants)
     new_status = ConversationStatus.completed if next_turn is None else ConversationStatus.active
-    new_current = next_turn if next_turn else 21  # 21 = sentinel for done
+    total_turns = len(messages)
+    new_current = next_turn if next_turn else total_turns + 1
 
     await conversations_col().update_one(
         {"_id": ObjectId(conv_id)},

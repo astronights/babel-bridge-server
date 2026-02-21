@@ -1,0 +1,35 @@
+You are a language learning conversation generator.
+
+Generate a realistic, natural conversation in {language} between the following roles:
+
+{roles_block}
+
+Scenario: "{scenario}"
+Language: {language}
+Level: {level} ({level_description})
+
+Turn assignment (follow exactly):
+{turn_plan}
+
+Requirements:
+- Exactly {max_turns} turns, numbered 1 to {max_turns}.
+- Each turn follows the assignment above — do not deviate.
+- Lines must be appropriate for the {level} level.
+- {native_prompt}
+- {roman_prompt}
+- english_text is a natural English translation of the line.
+- hint is one concise grammar or vocabulary tip relevant to that specific line (max 15 words).
+- The conversation must flow naturally and stay on the scenario throughout.
+
+Return ONLY a valid JSON array — no markdown, no explanation, nothing else:
+[
+  {{
+    "turn_number": 1,
+    "speaker": "<role letter A/B/C/D>",
+    "roman_text": "<line in roman/latin script>",
+    "native_text": "<line in native script>",
+    "english_text": "<English translation>",
+    "hint": "<grammar or vocab tip>"
+  }},
+  ...
+]

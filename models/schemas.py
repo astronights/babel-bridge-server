@@ -181,6 +181,7 @@ class RoomResponse(BaseModel):
 # Conversations
 class CreateConversationRequest(BaseModel):
     prompt: Optional[str] = None   # If blank, AI picks a scenario
+    max_turns: int = Field(default=20, ge=4, le=20)
 
 
 class SubmitResponseRequest(BaseModel):

@@ -27,9 +27,18 @@ def conversations_col():
     return get_db()["conversations"]
 
 
+def languages_col():
+    return get_db()["languages"]
+
+def levels_col():
+    return get_db()["levels"]
+
+
 async def create_indexes():
     """Run once on startup to ensure indexes exist."""
     await users_col().create_index("username", unique=True)
     await rooms_col().create_index("join_code", unique=True)
     await rooms_col().create_index("members.user_id")
     await conversations_col().create_index("room_id")
+    await languages_col().create_index("code", unique=True)
+    await levels_col().create_index("code", unique=True)
