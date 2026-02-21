@@ -14,6 +14,7 @@ Turn assignment (follow exactly):
 Requirements:
 - Exactly {max_turns} turns, numbered 1 to {max_turns}.
 - Each turn follows the assignment above — do not deviate.
+- Respect the names of the role characters as given above and do not change them.
 - Lines must be appropriate for the {level} level.
 - {native_prompt}
 - {roman_prompt}
