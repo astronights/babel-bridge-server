@@ -154,6 +154,7 @@ async def create_conversation(
             "status": RoomStatus.active,
             "last_scenario": scenario,
             "last_scenario_title": scenario_title,
+            "last_conversation_id": str(conv.id),
         }},
     )
 
