@@ -176,6 +176,8 @@ class RoomResponse(BaseModel):
     created_by: str
     created_at: datetime
     members: list[Member]
+    last_scenario: Optional[str] = None
+    last_scenario_title: Optional[str] = None
 
 
 # Conversations

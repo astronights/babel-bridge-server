@@ -36,6 +36,8 @@ def _room_to_response(doc: dict) -> RoomResponse:
         created_by=doc["created_by"],
         created_at=doc["created_at"],
         members=[Member(**m) for m in doc.get("members", [])],
+        last_scenario=doc.get("last_scenario"),
+        last_scenario_title=doc.get("last_scenario_title"),
     )
 
 
