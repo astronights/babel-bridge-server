@@ -1,4 +1,4 @@
-# LingoTogether API
+# BabelBridge API
 
 AI-powered multiplayer language learning backend built with FastAPI, MongoDB (Motor), and Google Gemini.
 
