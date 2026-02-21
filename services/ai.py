@@ -101,13 +101,13 @@ def _build_prompt(
 
     return f"""You are a language learning conversation generator.
 
-Generate a realistic, natural conversation in {language.value} between the following roles:
+Generate a realistic, natural conversation in {language} between the following roles:
 
 {roles_block}
 
 Scenario: "{scenario}"
-Language: {language.value}
-Level: {level.value} ({level_desc})
+Language: {language}
+Level: {level} ({level_desc})
 
 Turn assignment (follow exactly):
 {turn_plan}
@@ -115,7 +115,7 @@ Turn assignment (follow exactly):
 Requirements:
 - Exactly 20 turns, numbered 1 to 20.
 - Each turn follows the assignment above — do not deviate.
-- Lines must be appropriate for the {level.value} level.
+- Lines must be appropriate for the {level} level.
 - {lang_note}
 - english_text is a natural English translation of the line.
 - hint is one concise grammar or vocabulary tip relevant to that specific line (max 15 words).
@@ -148,7 +148,7 @@ async def generate_conversation(
     scenario = _resolve_scenario(language, level, prompt)
     ai_prompt = _build_prompt(language, level, scenario, participants)
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     response = await model.generate_content_async(ai_prompt)
     text = response.text.strip()
 
