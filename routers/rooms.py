@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from bson import ObjectId
 
 from core.auth import get_current_user
-from core.database import rooms_col
+from core.database import conversations_col, rooms_col
 from models.schemas import (
     CreateRoomRequest, JoinRoomRequest, RoomResponse,
     Room, Member, RoomStatus, utcnow,
@@ -47,6 +47,18 @@ async def create_room(body: CreateRoomRequest, current_user: dict = Depends(get_
     join_code = await _unique_join_code()
     user_id = current_user["sub"]
     username = current_user["username"]
+
+    # Count rooms where user is host and status is active or waiting
+    existing = await rooms_col().count_documents({
+        "created_by": user_id,
+        "status": {"$in": ["waiting", "active"]}
+    })
+
+    if existing >= 5:
+        raise HTTPException(
+            status_code=409,
+            detail="You have reached the maximum of 5 active rooms. Delete a room to create a new one."
+        )
 
     creator_member = Member(
         user_id=user_id,
@@ -137,3 +149,17 @@ async def get_room(room_id: str, current_user: dict = Depends(get_current_user))
         raise HTTPException(status_code=403, detail="You are not a member of this room")
 
     return _room_to_response(doc)
+
+@router.delete("/{room_id}", status_code=204)
+async def delete_room(
+    room_id: str,
+    current_user: dict = Depends(get_current_user),
+):
+    user_id = current_user["sub"]
+    room_doc = await get_room(room_id, current_user)
+    
+    if room_doc["created_by"] != user_id:
+        raise HTTPException(status_code=403, detail="Only the host can delete this room")
+    
+    await rooms_col().delete_one({"_id": ObjectId(room_id)})
+    await conversations_col().delete_many({"room_id": room_id})
