@@ -158,7 +158,7 @@ async def delete_room(
     user_id = current_user["sub"]
     room_doc = await get_room(room_id, current_user)
     
-    if room_doc["created_by"] != user_id:
+    if room_doc.created_by != user_id:
         raise HTTPException(status_code=403, detail="Only the host can delete this room")
     
     await rooms_col().delete_one({"_id": ObjectId(room_id)})
