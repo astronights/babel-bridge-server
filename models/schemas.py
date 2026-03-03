@@ -22,12 +22,6 @@ def new_object_id() -> str:
 #  Enums
 # ─────────────────────────────────────────
 
-class Language(str, Enum):
-    russian = "Russian"
-    chinese = "Chinese"
-    swedish = "Swedish"
-
-
 class Level(str, Enum):
     a1 = "A1"
     a2 = "A2"
@@ -111,7 +105,7 @@ class User(BaseModel):
 
 class Room(BaseModel):
     id: str = Field(default_factory=new_object_id)
-    language: Language
+    language: str
     level: Level
     max_players: int = Field(ge=2, le=4)
     join_code: str
@@ -155,7 +149,7 @@ class TokenResponse(BaseModel):
 
 # Rooms
 class CreateRoomRequest(BaseModel):
-    language: Language
+    language: str
     level: Level
     max_players: int = Field(default=2, ge=2, le=4)
     display_name: str = Field(min_length=1, max_length=32)
@@ -168,7 +162,7 @@ class JoinRoomRequest(BaseModel):
 
 class RoomResponse(BaseModel):
     id: str
-    language: Language
+    language: str
     level: Level
     max_players: int
     join_code: str
